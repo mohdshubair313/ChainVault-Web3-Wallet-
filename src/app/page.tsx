@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from 'react';
-import { generateSeedPhrase, generateEthKeys, generateSolanaKeys, generateBitcoinKeys } from './utils/crypto';
+import { generateSeedPhrase, generateEthKeys, generateSolanaKeys, } from './utils/crypto';
 
 const Home = () => {
   const [seedPhrase, setSeedPhrase] = useState<string | null>(null);
@@ -19,7 +19,6 @@ const Home = () => {
     if (!seedPhrase) return;
     if (blockchain === 'ethereum') setKeys(generateEthKeys(seedPhrase));
     if (blockchain === 'solana') setKeys(generateSolanaKeys(seedPhrase));
-    if (blockchain === 'bitcoin') setKeys(generateBitcoinKeys(seedPhrase));
   };
 
   return (

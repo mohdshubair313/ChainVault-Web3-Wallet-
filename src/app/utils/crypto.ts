@@ -8,7 +8,10 @@ export const generateSeedPhrase = (): string => {
 };
 
 // Derive Ethereum Keys
-export const generateEthKeys = (seedPhrase: any) => {
+export const generateEthKeys = (seedPhrase: string) => {
+  if (!bip39.validateMnemonic(seedPhrase)) {
+    throw new Error('Invalid seed phrase');
+  }
   const wallet = HDNodeWallet.fromMnemonic(seedPhrase);
   return {
     privateKey: wallet.privateKey,
@@ -18,12 +21,13 @@ export const generateEthKeys = (seedPhrase: any) => {
 
 // Derive Solana Keys
 export const generateSolanaKeys = (seedPhrase: string) => {
+  if (!bip39.validateMnemonic(seedPhrase)) {
+    throw new Error('Invalid seed phrase');
+  }
   const seed = bip39.mnemonicToSeedSync(seedPhrase).slice(0, 32);
-  const keypair = SolanaKeypair.fromSeed(seed);
+  const keypair = SolanaKeypair.fromSeed(Uint8Array.from(seed));
   return {
     privateKey: Buffer.from(keypair.secretKey).toString('hex'),
-    publicKey: keypair.publicKey.toString(),
+    publicKey: keypair.publicKey.toBase58(),
   };
 };
-
-
